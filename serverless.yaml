@@ -26,7 +26,7 @@ provider:
   region: sa-east-1
   iamRoleStatements:
     - Effect: Allow
-      Actions:
+      Action:
         - dynamodb:*
       Resources: "*"
     - Effect: Allow
