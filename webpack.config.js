@@ -59,7 +59,7 @@ module.exports = {
       patterns: [
         {
           from: "./src/templates",
-          to: path.join(__dirname, "./webpack/service/src/templates"),
+          to: path.join(__dirname, ".webpack/service/src/templates"),
         }
       ]
     })
