@@ -35,16 +35,29 @@ export const handle: APIGatewayProxyHandler = async (event) => {
 
   const { id, name, grade } = JSON.parse(event.body) as ICreateCertificate;
 
-  const params = {
+  const response = await documentClient.query({
     TableName: 'user_certificates',
-    Item: {
-      id,
-      name,
-      grade
+    KeyConditionExpression: "id = :id",
+    ExpressionAttributeValues: {
+      ":id": id
     }
+  }).promise();
+
+  const userAlreadyExists = await response.Items[0];
+
+  if (!userAlreadyExists) {
+    const params = {
+      TableName: 'user_certificates',
+      Item: {
+        id,
+        name,
+        grade
+      }
+    }
+
+    await documentClient.put(params).promise();
   }
 
-  await documentClient.put(params).promise();
 
   const medalPath = path.join(process.cwd(), 'src', 'templates', 'selo.png');
   const medal = fs.readFileSync(medalPath, 'base64');
